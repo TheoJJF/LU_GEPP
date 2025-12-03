@@ -1,4 +1,4 @@
-function [U,d] = SGEPP(A,b)
+function [U,d] = SGEPP(A,b,TOL)
 %{
 
 Perform Sparse Gaussian Elimination with Partial Pivoting (SGEPP).
@@ -75,7 +75,7 @@ Returns: U (Struct/Matrix), d (Vector)
         [Aii_max,i_max] = max(abs(subcol));
         subcol = subcol*0;
 
-        if abs(Aii_max) < 1e-8
+        if abs(Aii_max) < TOL
             error("SGEPP:SingularMatrix","Matrix is singular.");
         end
 
@@ -109,7 +109,7 @@ Returns: U (Struct/Matrix), d (Vector)
                     updated_entry = U{j}(kth_key);
                 end
 
-                if abs(updated_entry) < 1e-8
+                if abs(updated_entry) < TOL
                     U{j} = remove(U{j},kth_key);
                 else
                     U{j}(kth_key) = updated_entry;

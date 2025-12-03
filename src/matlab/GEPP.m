@@ -1,4 +1,4 @@
-function [U,d] = GEPP(A,b,TOL)
+function [L,U,P] = GEPP(A,TOL)
 %{
 
 Perform Gaussian Elimination with Partial Pivoting (GEPP).
@@ -7,20 +7,18 @@ Parameters: A (Matrix), b (Vector)
 Note: A is assume to be nonsingular
     Error is thrown when the matrix is near/singular.
 
-Returns: L (Matrix), U (Matrix), d (Vector)
+Returns: L (Matrix), U (Matrix), P (Matrix)
 
 %}
 
     [n,m] = size(A);
 
-    if n ~= size(b,1)
-        error("GEPP:IncompatibleSystem","Incompatible system.");
-    end
-
     if n ~= m
         warning("GEPP:NonsquareMatrix","Matrix is not square.");
     end
 
+    P = eye(size(A));
+    L = zeros(size(A));
     pivot_factor = zeros(n,1);
     
     for i = 1:n-1
@@ -34,7 +32,8 @@ Returns: L (Matrix), U (Matrix), d (Vector)
         
         if i ~= i_max
             A([i_max,i],:) = A([i,i_max],:);
-            b([i_max,i]) = b([i,i_max]);
+            L([i_max,i],:) = L([i,i_max],:);
+            P([i_max,i],:) = P([i,i_max],:);
         end
 
         pivot_recip = 1/A(i,i);
@@ -42,7 +41,7 @@ Returns: L (Matrix), U (Matrix), d (Vector)
         for j = i+1:n
             pivot_factor(j) = A(j,i)*pivot_recip;
             A(j,i) = 0;
-            b(j) = b(j)-pivot_factor(j)*b(i);
+            L(j,i) = pivot_factor(j);
         end
 
         for j = i+1:n
@@ -56,5 +55,5 @@ Returns: L (Matrix), U (Matrix), d (Vector)
         error("GEPP:SingularMatrix","Matrix is singular.");
     end
 
-    U = A; d = b;
+    U = A; L = L + eye(n);
 end

@@ -1,4 +1,5 @@
 function x = SolveGEPP(A,b,TOL)
-    [U,d] = GEPP(A,b,TOL);
-    x = BackSub(U,d);
+    [L,U,P] = GEPP(A,TOL);
+    y = ForSub(L,P*b);
+    x = BackSub(U,y);
 end
