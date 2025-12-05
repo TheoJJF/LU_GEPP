@@ -3,7 +3,7 @@ function [L,U,P,d] = GEPP(A,b,TOL)
 
 Perform Gaussian Elimination with Partial Pivoting (GEPP).
 
-Parameters: A (Matrix), b (Vector)
+Parameters: A (Matrix), b (Vector), TOL (Double)
 Note: A is assume to be nonsingular
     Error is thrown when the matrix is near/singular.
 
@@ -12,9 +12,9 @@ Returns: L (Matrix), U (Matrix), P (Matrix) d (Vector)
 %}
 
     arguments
-        A;
-        b = zeros(size(A,1),1);
-        TOL = 1e-12;
+        A 
+        b
+        TOL = 1e-12
     end
 
     [n,m] = size(A);
@@ -37,9 +37,10 @@ Returns: L (Matrix), U (Matrix), P (Matrix) d (Vector)
         i_max = i-1+i_max_subcol;
         
         if i ~= i_max
-            A([i_max,i],:) = A([i,i_max],:);
             L([i_max,i],:) = L([i,i_max],:);
             P([i_max,i],:) = P([i,i_max],:);
+
+            A([i_max,i],:) = A([i,i_max],:);
             b([i_max,i]) = b([i,i_max]);
         end
 
@@ -48,6 +49,7 @@ Returns: L (Matrix), U (Matrix), P (Matrix) d (Vector)
         for j = i+1:n
             pivot_factor(j) = A(j,i)*pivot_recip;
             L(j,i) = pivot_factor(j);
+
             b(j) = b(j)-pivot_factor(j)*b(i);
             A(j,i) = 0;
         end

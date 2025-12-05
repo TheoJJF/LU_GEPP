@@ -44,6 +44,13 @@ Returns: U (Struct/Matrix), d (Vector)
 
 %}
 
+    arguments
+        A 
+        b
+        TOL = 1e-12
+    end
+
+
     if isstruct(A) == false
         [U,d] = GEPP(A,b);
         return
