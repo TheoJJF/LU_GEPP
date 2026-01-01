@@ -1,8 +1,6 @@
 function [L,U,P,d] = LU(A,b,TOL)
 %{
 
-Perform Gaussian Elimination with Partial Pivoting (GEPP).
-
 Parameters: A (Matrix), b (Vector), TOL (Double)
 Note: A is assume to be nonsingular
     Error is thrown when the matrix is near/singular.
